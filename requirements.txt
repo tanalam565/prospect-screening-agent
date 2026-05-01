@@ -1,0 +1,24 @@
+# Django
+django>=5.0
+
+# LangChain + Ollama
+langchain
+langchain-ollama
+langchain-community
+
+# LangGraph
+langgraph
+
+# AutoGen (multi-agent group chat)
+pyautogen
+
+# CrewAI (requires Python 3.10-3.12)
+crewai
+
+# BeeAI (requires Python 3.10-3.12)
+beeai-framework
+
+pyautogen==0.2.35
+
+# Utilities
+python-dotenv

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prospects</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+        th { background-color: #f4f4f4; }
+        a { text-decoration: none; color: #007bff; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Prospects</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prospect in prospects %}
+            <tr>
+                <!-- Link to the prospect detail page using the prospect's ID -->
+                <td><a href="{% url 'prospect-detail' prospect.id %}">{{ prospect.first_name }} {{ prospect.last_name }}</a></td>
+                <td>{{ prospect.email }}</td>
+                <td>{{ prospect.phone }}</td>
+                <td>{{ prospect.city }}</td>
+                <td>{{ prospect.state }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No prospects found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

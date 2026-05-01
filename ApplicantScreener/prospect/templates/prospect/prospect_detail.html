@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ prospect.first_name }} {{ prospect.last_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-4">
+
+    <a href="{% url 'prospect-list' %}" class="btn btn-secondary mb-3">&larr; Back to Prospects</a>
+
+    <h2 class="mb-4">{{ prospect.first_name }} {{ prospect.last_name }}</h2>
+
+    <!-- Prospect Info -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Personal Information</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4"><strong>Email:</strong> {{ prospect.email }}</div>
+                <div class="col-md-4"><strong>Phone:</strong> {{ prospect.phone }}</div>
+                <div class="col-md-4"><strong>DOB:</strong> {{ prospect.date_of_birth }}</div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-8"><strong>Address:</strong> {{ prospect.current_address }}, {{ prospect.city }}, {{ prospect.state }} {{ prospect.zip_code }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credit Report -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Credit Report</div>
+        <div class="card-body">
+            {% if credit_report %}
+            <div class="row">
+                <div class="col-md-3"><strong>Credit Score:</strong> {{ credit_report.credit_score }}</div>
+                <div class="col-md-3"><strong>Total Debt:</strong> ${{ credit_report.total_debt }}</div>
+                <div class="col-md-3"><strong>Monthly Payments:</strong> ${{ credit_report.monthly_debt_payments }}</div>
+                <div class="col-md-3"><strong>Repayment Status:</strong> {{ credit_report.repayment_history_status }}</div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3"><strong>Eviction History:</strong> {{ credit_report.has_eviction_history|yesno:"Yes,No" }}</div>
+                <div class="col-md-3"><strong>Criminal Record:</strong> {{ credit_report.has_criminal_record|yesno:"Yes,No" }}</div>
+                <div class="col-md-3"><strong>Bankruptcy:</strong> {{ credit_report.bankruptcy_history|yesno:"Yes,No" }}</div>
+            </div>
+            {% else %}
+            <p class="text-muted">No credit report available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Proof of Income -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Proof of Income</div>
+        <div class="card-body">
+            {% if proof_of_income %}
+            <div class="row">
+                <div class="col-md-4"><strong>Employer:</strong> {{ proof_of_income.employer_name }}</div>
+                <div class="col-md-4"><strong>Occupation:</strong> {{ proof_of_income.occupation }}</div>
+                <div class="col-md-4"><strong>Status:</strong> {{ proof_of_income.employment_status }}</div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4"><strong>Monthly Income:</strong> ${{ proof_of_income.gross_monthly_income }}</div>
+                <div class="col-md-4"><strong>Pay Frequency:</strong> {{ proof_of_income.pay_frequency }}</div>
+                <div class="col-md-4"><strong>Verified:</strong> {{ proof_of_income.verified|yesno:"Yes,No" }}</div>
+            </div>
+            {% else %}
+            <p class="text-muted">No proof of income available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Photo ID -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Photo ID</div>
+        <div class="card-body">
+            {% if photo_id %}
+            <div class="row">
+                <div class="col-md-4"><strong>ID Type:</strong> {{ photo_id.id_type }}</div>
+                <div class="col-md-4"><strong>Issuing Authority:</strong> {{ photo_id.issuing_authority }}</div>
+                <div class="col-md-4"><strong>Expiration:</strong> {{ photo_id.expiration_date }}</div>
+            </div>
+            {% else %}
+            <p class="text-muted">No photo ID available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Screening Result -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Screening Result</div>
+        <div class="card-body">
+            {% if screening_result %}
+            <div class="row">
+                <div class="col-md-3"><strong>Risk Level:</strong>
+                    <span class="badge {% if screening_result.overall_risk_level == 'low' %}bg-success{% elif screening_result.overall_risk_level == 'medium' %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                        {{ screening_result.overall_risk_level }}
+                    </span>
+                </div>
+                <div class="col-md-3"><strong>Recommendation:</strong>
+                    <span class="badge {% if screening_result.recommendation == 'approve' %}bg-success{% elif screening_result.recommendation == 'conditional' %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                        {{ screening_result.recommendation }}
+                    </span>
+                </div>
+                <div class="col-md-3"><strong>DTI Ratio:</strong> {{ screening_result.debt_to_income_ratio }}%</div>
+                <div class="col-md-3"><strong>Ability to Pay:</strong> {{ screening_result.ability_to_pay_score }}</div>
+            </div>
+
+            <!-- Flags -->
+            {% if flags %}
+            <hr>
+            <h6 class="mt-2">Flags</h6>
+            <ul class="list-group">
+                {% for flag in flags %}
+                <li class="list-group-item">
+                    <span class="badge {% if flag.severity == 'high' %}bg-danger{% elif flag.severity == 'medium' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                        {{ flag.severity }}
+                    </span>
+                    <strong class="ms-2">{{ flag.flag_type }}</strong> — {{ flag.description }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% else %}
+            <p class="text-muted">No screening result available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
