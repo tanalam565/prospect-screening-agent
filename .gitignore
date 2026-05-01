@@ -19,6 +19,9 @@ env/
 media/
 staticfiles/
 
+# AutoGen cache
+.cache/
+
 # Environment variables
 .env
 .env.*
